@@ -14,11 +14,11 @@ let tray;
 let batteryCheckInterval;
 
 app.whenReady().then(() => {
-    const icon = nativeImage.createFromPath(path.join(rootPath,'src/assets/bat_5.png'));
+    const icon = nativeImage.createFromPath(path.join(rootPath, 'src/assets/bat_5.png'));
     tray = new Tray(icon);
 
     const contextMenu = Menu.buildFromTemplate([
-        { label: 'Quit',  type: 'normal', click: QuitClick }
+        {label: 'Quit', type: 'normal', click: QuitClick}
     ]);
 
     batteryCheckInterval = setInterval(() => {
@@ -26,7 +26,7 @@ app.whenReady().then(() => {
     }, 30000);
 
     SetTrayDetails(tray);
-    
+
     tray.setContextMenu(contextMenu);
     tray.setToolTip('?');
     tray.setTitle('Razer Battery Life');
@@ -39,7 +39,7 @@ function SetTrayDetails(tray) {
         let assetPath = GetBatteryIconPath(battLife);
 
         tray.setImage(nativeImage.createFromPath(path.join(rootPath, assetPath)));
-        tray.setToolTip(battLife +'%');
+        tray.setToolTip(battLife + '%');
     });
 }
 
@@ -47,11 +47,11 @@ function GetBatteryIconPath(val) {
     let iconName;
     if (val >= 80) {
         iconName = 'bat_5.png';
-    } else if ( val >= 60) {
+    } else if (val >= 60) {
         iconName = 'bat_4.png';
-    } else if ( val >= 40) {
+    } else if (val >= 40) {
         iconName = 'bat_3.png';
-    } else if (val >= 20){
+    } else if (val >= 20) {
         iconName = 'bat_2.png';
     } else {
         iconName = 'bat_1.png';
@@ -60,24 +60,25 @@ function GetBatteryIconPath(val) {
     return `src/assets/${iconName}`;
 }
 
-function QuitClick(){
+function QuitClick() {
     clearInterval(batteryCheckInterval);
     if (process.platform !== 'darwin') app.quit();
-};
+}
 
 // mouse stuff
 const RazerVendorId = 0x1532;
 const TransactionId = 0x1f
 const RazerProducts = {
-    0x0088: {
-        name: 'Razer Basilisk Ultimate Dongle',
+    0x00B6: {
+        name: 'Razer Deathadder V3 Pro Wired',
         wireless: true
     },
-    0x0086: {
-        name: 'Razer Basilisk Ultimate',
+    0x00B7: {
+        name: 'Razer Deathadder V3 Pro Wireless',
         wireless: true
     }
 };
+
 function GetMessage() {
     // Function that creates and returns the message to be sent to the device
     let msg = Buffer.from([0x00, TransactionId, 0x00, 0x00, 0x00, 0x02, 0x07, 0x80]);
@@ -94,11 +95,12 @@ function GetMessage() {
     msg = Buffer.concat([msg, Buffer.from([crc, 0])]);
 
     return msg;
-};
+}
+
 async function GetMouse() {
     const customWebUSB = new WebUSB({
         // This function can return a promise which allows a UI to be displayed if required
-        devicesFound: devices => devices.find(device => device.vendorId == RazerVendorId && RazerProducts[device.productId] != undefined)
+        devicesFound: devices => devices.find(device => device.vendorId === RazerVendorId && RazerProducts[device.productId] !== undefined)
     });
 
     // Returns device based on injected 'devicesFound' function
@@ -111,7 +113,8 @@ async function GetMouse() {
     } else {
         throw new Error('No Razer device found on system');
     }
-};
+}
+
 async function GetBattery() {
     try {
         const mouse = await GetMouse();
@@ -125,15 +128,13 @@ async function GetBattery() {
         }
 
         await mouse.claimInterface(mouse.configuration.interfaces[0].interfaceNumber);
-
-        const request = await mouse.controlTransferOut({
+        await mouse.controlTransferOut({
             requestType: 'class',
             recipient: 'interface',
             request: 0x09,
             value: 0x300,
             index: 0x00
-        }, msg)
-
+        }, msg);
         await new Promise(res => setTimeout(res, 500));
 
         const reply = await mouse.controlTransferIn({
@@ -148,4 +149,4 @@ async function GetBattery() {
     } catch (error) {
         console.error(error);
     }
-};
+}
