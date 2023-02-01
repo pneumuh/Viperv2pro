@@ -45,17 +45,8 @@ function SetTrayDetails(tray) {
 
 function GetBatteryIconPath(val) {
     let iconName;
-    if (val >= 80) {
-        iconName = 'bat_5.png';
-    } else if (val >= 60) {
-        iconName = 'bat_4.png';
-    } else if (val >= 40) {
-        iconName = 'bat_3.png';
-    } else if (val >= 20) {
-        iconName = 'bat_2.png';
-    } else {
-        iconName = 'bat_1.png';
-    }
+
+    iconName = val + '.png';
 
     return `src/assets/${iconName}`;
 }
