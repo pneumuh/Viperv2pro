@@ -46,7 +46,15 @@ function SetTrayDetails(tray) {
 function GetBatteryIconPath(val) {
     let iconName;
 
-    iconName = val + '.png';
+    if (val >= 75) {
+        iconName = 'fullcharge.png';
+    } else if ( val >= 50) {
+        iconName = 'threequarters.png';
+    } else if ( val >= 25) {
+        iconName = 'halfcharge.png';
+    } else if (val >= 0){
+        iconName = 'onebar.png';
+    }
 
     return `src/assets/${iconName}`;
 }
