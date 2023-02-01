@@ -136,7 +136,7 @@ async function GetBattery() {
             index: 0x00
         }, 90)
 
-        return (reply.data.getUint8(9) / 255 * 100).toFixed(1);
+        return (reply.data.getUint8(9) / 255 * 100).toFixed();
     } catch (error) {
         console.error(error);
     }
