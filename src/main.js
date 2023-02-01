@@ -46,7 +46,7 @@ function SetTrayDetails(tray) {
 function GetBatteryIconPath(val) {
     let iconName;
 
-    iconName = ((val / 5) * 5) + '.png';
+    iconName = (Math.floor(val/5) * 5) + '.png';
 
     return `src/assets/${iconName}`;
 }
