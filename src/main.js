@@ -60,12 +60,12 @@ function QuitClick() {
 const RazerVendorId = 0x1532;
 const TransactionId = 0x1f
 const RazerProducts = {
-    0x00B6: {
-        name: 'Razer Deathadder V3 Pro Wired',
+    0x00A5: {
+        name: 'Razer Viper V2 Pro Wired',
         wireless: true
     },
-    0x00B7: {
-        name: 'Razer Deathadder V3 Pro Wireless',
+    0x00A6: {
+        name: 'Razer Viper V2 Pro Wireless',
         wireless: true
     }
 };
